@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block css %}
+    <link rel = "stylesheet" href = "{{ url_for('static', filename='index.css') }}" />
+{% endblock %}
+
+{% block title %}Clinical Chemistry - Case Studies{% endblock %}
+
+{% block bodycontent %}
+    <h3>Welcome to <span class>Clinical Chemistry</span></h3>
+    <p>
+        Get ready to use your clinical chemistry knowledge by working through case studies. Select 
+        the types of cases you want to see with the button on the side panel. This will automatically
+        load your first case!
+    </p>
+    <p>
+        When working through these case studies, keep these things in mind:
+        <ol>
+            <li>
+                Read through all the transcripts. These provide helpful context for each case.
+            </li>
+            <li>
+                Take note of any previous diagnoses.
+            </li>
+            <li>
+                Don't order too many tests. Ordering useless tests will lower your final score.
+            </li>
+        </ol>
+    </p>
+{% endblock %}

@@ -1,0 +1,97 @@
+@import 'config';
+
+body {
+    background: $primary-color;
+}
+
+#app-window {
+    display: flex;
+    flex-direction: row;
+    height: 80vh;
+    width: 80vw;
+    margin: 10vh auto;
+}
+
+#case-selection {
+    
+    label {
+        font-size: 1rem;
+        color: $primary-color;
+    }
+
+    .btn {
+        color: $offwhite-color;
+        background: $accent-color;
+    }
+
+    #submit {
+        color: $offwhite-color;
+    }
+
+    i {
+        margin-left: 0.5rem;
+    }
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    color: $text-color;
+    background: $secondary-color;
+    font-family: 'Roboto Condensed', sans-serif;
+    letter-spacing: 1.6px;
+    height: 100%;
+    width: 40%;
+
+    div:first-child {
+        display: flex;
+        flex-direction: column;
+        color: $primary-color;
+        background: $offwhite-color;
+        height: 25%;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+
+        .btn {
+            display: flex;
+            margin-top: 1rem;
+            background: $accent-color;
+            color: $offwhite-color;
+        }
+    }
+
+    div:not(:first-child) {
+        display: flex;
+        flex: 1, 1, auto;
+        width: 100%;
+        height: 20%;
+        align-items: center;
+        text-align: left;
+        justify-content: start;
+        padding-left: 10px;
+    }
+
+    div:not(:first-child):hover {
+        background: #3e485D;
+        border-left: 3px solid #fd7f72;
+        color: $offwhite-color;
+    }
+
+    i {
+        margin-right: 1rem;
+        color: $text-color;
+    }
+}
+
+#main-panel {
+    width: 100%;
+    padding: 1.5rem;
+
+    .card-panel {
+        width: 20%;
+        background: $accent-color;
+        color: $offwhite-color;
+    }
+}

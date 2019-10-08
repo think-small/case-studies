@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}" />
+    <link rel = "stylesheet" href = "{{ url_for('static', filename='styles.css') }}" />
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <div id = "app-window">
+        <div id = "sidebar">
+            <div id = "unit-selector">
+                {% block units %} 
+                    {% if units == null %}
+                        Choose Units to Review
+                    {% endif %} 
+                {% endblock %} 
+                <a class="waves-effect waves-light btn modal-trigger" href = "#case-selection">Select Cases</a></div>
+            <div id = "transcripts"><i class="fas fa-clipboard-list icon"></i>TRANSCRIPTS</div>
+            <div id = "history"><i class="fas fa-notes-medical icon"></i>PATIENT HISTORY</div>
+            <div id = "orders"><i class="fas fa-vial icon"></i>ORDERS</div>
+            <div id = "results"><i class="far fa-list-alt icon"></i>TEST RESULTS</div>
+            <div id = "interpretation"><i class="fas fa-user-md icon"></i>INTERPRETATION</div>
+        </div>
+        <div id = "main-panel">
+            {% block flashmessages %}
+                {% for message in get_flashed_messages() %}
+                <div class = 'card-panel'>
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {%  endblock %}
+            {% block bodycontent %}{% endblock %}
+        </div>
+    </div>
+    <div id="case-selection" class="modal">
+        <div class="modal-content">
+            <h4>Select Your Cases to Review</h4>
+            <form id = "case-select-form" method = "POST">
+                {{ form.hidden_tag() }}
+                <p>
+                   <label>
+                        {{ form.osmoLytes() }}<span>{{ form.osmoLytes.label }} </span>
+                   </label> 
+                </p>
+                <p>
+                    <label>
+                        {{ form.renal(disabled = disabled) }}<span>{{ form.renal.label }}</span>
+                    </label>
+                </p>                 
+                <p>
+                    <label>
+                        {{ form.lipoprotein(disabled = disabled) }}<span>{{ form.lipoprotein.label }}</span>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        {{ form.hepatitisHiv(disabled = disabled) }}<span>{{ form.hepatitisHiv.label }}</span>
+                    </label>
+                </p>
+                 <p>
+                     <label>
+                        {{ form.enzymes(disabled = disabled) }}<span>{{ form.enzymes.label }}</span>
+                     </label>
+                 </p>                 
+                {{ form.submit(class = "btn waves-effect waves-light modal-close") }}
+            </form>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="{{ url_for('static', filename='materialize/js/materialize.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='my_js/base.js') }}"></script>
+</html>
