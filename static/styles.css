@@ -51,7 +51,7 @@ body {
   width: 40%;
 }
 
-#sidebar div:first-child {
+#sidebar div {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -71,16 +71,21 @@ body {
           justify-content: center;
 }
 
-#sidebar div:first-child .btn {
+#sidebar div a.btn-small {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
   margin-top: 1rem;
   background: #fd7f72;
   color: #fefefe;
+  width: 46%;
+  height: 2rem;
 }
 
-#sidebar div:not(:first-child) {
+#sidebar a {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -97,9 +102,14 @@ body {
       -ms-flex-pack: start;
           justify-content: start;
   padding-left: 10px;
+  color: #b5b7bc;
 }
 
-#sidebar div:not(:first-child):hover {
+#sidebar a:visited {
+  color: #b5b7bc;
+}
+
+#sidebar a:not(.btn-small):hover {
   background: #3e485D;
   border-left: 3px solid #fd7f72;
   color: #fefefe;
@@ -113,5 +123,13 @@ body {
 #main-panel {
   width: 100%;
   padding: 1.5rem;
+}
+
+#main-panel .card-panel {
+  width: 40%;
+  background: #fd7f72;
+  color: #fefefe;
+  text-align: center;
+  padding: 0.5rem;
 }
 /*# sourceMappingURL=styles.css.map */

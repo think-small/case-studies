@@ -20,8 +20,13 @@ def index():
             return redirect( url_for('index') )
         else:
             flash('New case loaded!')
-            return redirect( url_for('index') )
+            return redirect( url_for('transcripts') )
     return render_template("index.html", form = form)
+
+@app.route("/trancripts", methods = ["GET", "POST"])
+def transcripts():
+    form = SelectCaseForm()
+    return render_template("transcripts.html", form = form)
 
 if __name__ == "__main__":
     app.run(debug = True)
