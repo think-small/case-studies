@@ -44,7 +44,7 @@ body {
     height: 100%;
     width: 40%;
 
-    div:first-child {
+    div {
         display: flex;
         flex-direction: column;
         color: $primary-color;
@@ -54,15 +54,18 @@ body {
         align-items: center;
         justify-content: center;
 
-        .btn {
+        a.btn-small {
             display: flex;
+            justify-content: center;
             margin-top: 1rem;
             background: $accent-color;
             color: $offwhite-color;
+            width: 46%;
+            height: 2rem;   
         }
     }
 
-    div:not(:first-child) {
+    a {
         display: flex;
         flex: 1, 1, auto;
         width: 100%;
@@ -71,9 +74,14 @@ body {
         text-align: left;
         justify-content: start;
         padding-left: 10px;
+        color: $text-color;
     }
 
-    div:not(:first-child):hover {
+    a:visited {
+        color: $text-color;
+    }
+
+    a:not(.btn-small):hover {
         background: #3e485D;
         border-left: 3px solid #fd7f72;
         color: $offwhite-color;
@@ -90,8 +98,10 @@ body {
     padding: 1.5rem;
 
     .card-panel {
-        width: 20%;
+        width: 40%;
         background: $accent-color;
         color: $offwhite-color;
+        text-align: center;
+        padding: 0.5rem;
     }
 }
