@@ -1,0 +1,29 @@
+@import 'config';
+@import 'styles';
+
+#sidebar #transcripts {
+    background: #3e485D;
+    border-left: 3px solid #fd7f72;
+    color: $offwhite-color;
+
+    i {
+        color: $offwhite-color;
+    }
+}
+
+.collapsible-header {
+    letter-spacing: 1.4px;
+    font-size: 18px;
+    padding-left: 2rem;
+    background: $accent-two-color;
+    color: $offwhite-color;
+
+    i {
+        margin-left: 2rem;
+    }
+}
+
+.collapsible-body {
+    background: $offwhite-color;
+    color: $primary-color;
+}

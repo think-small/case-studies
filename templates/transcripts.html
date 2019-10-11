@@ -1,10 +1,32 @@
 {% extends "base.html" %}
 
 {% block title %} Case Studies - Transcripts {% endblock %}
+{% block css %}
+    <link rel = "stylesheet" href = "{{ url_for('static', filename='transcripts.css') }}" />
+{% endblock %}
 
 {% block bodycontent %}
-    <h3>Transcripts go Here</h3>
-    {% for case in cases.notes %}
-        <p>{{ case.note }}</p>
+    <ul class = "collapsible popout">
+    {% for case in case.notes %}
+        <li>
+            <div class = "collapsible-header">                
+                {{ case.location }} - {{ case.date }} 
+                {% if case.noteType == "vitals" %}
+                    <i class="fas fa-heartbeat"></i>
+                {% elif case.noteType == "exam" %}
+                    <i class="fas fa-stethoscope"></i>
+                {% elif case.noteType == "history" %}
+                    <i class="fas fa-clipboard-list"></i>
+                {% endif %} 
+            </div>
+            <div class = "collapsible-body">
+                <span>
+                {% for note in case.note.split('\n')%}
+                    <p>{{ note }}</p>
+                {% endfor %}
+                </span>
+            </div>
+        </li>
     {% endfor %}
+    </ul>
 {% endblock %}

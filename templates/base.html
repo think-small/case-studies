@@ -14,9 +14,11 @@
     <div id = "app-window">
         <div id = "sidebar">
             <div id = "unit-selector">
-                {% block units %} 
-                    {% if units == null %}
+                {% block unit_name %} 
+                    {% if unit_name == null %}
                         Choose Units to Review
+                    {% else %}
+                        {{ unit_name }}
                     {% endif %} 
                 {% endblock %} 
                 <a class="waves-effect waves-light btn-small modal-trigger" href = "#case-selection">Select Cases</a>
@@ -41,7 +43,7 @@
     <div id="case-selection" class="modal">
         <div class="modal-content">
             <h4>Select Your Cases to Review</h4>
-            <form id = "case-select-form" method = "POST">
+            <form id = "case-select-form" method = "POST" action= "/get_cases">
                 {{ form.hidden_tag() }}
                 <p>
                    <label>
