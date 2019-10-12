@@ -1,0 +1,19 @@
+#sidebar #history {
+  background: #3e485D;
+  border-left: 3px solid #fd7f72;
+  color: #fefefe;
+}
+
+#sidebar #history i {
+  color: #fefefe;
+}
+
+table {
+  background: #fefefe;
+  color: #3e485D;
+}
+
+table td, table th {
+  padding-left: 1rem;
+}
+/*# sourceMappingURL=history.css.map */
