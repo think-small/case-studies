@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAEA,AAAA,QAAQ,CAAC,QAAQ,CAAC;EACd,UAAU,EAAE,OAAO;EACnB,WAAW,EAAE,iBAAiB;EAC9B,KAAK,ECAQ,OAAO;CDKvB;;AARD,AAKI,QALI,CAAC,QAAQ,CAKb,CAAC,CAAC;EACE,KAAK,ECHI,OAAO;CDInB;;AAGL,AAAA,KAAK,CAAC;EACF,UAAU,ECRG,OAAO;EDSpB,KAAK,ECdO,OAAO;CDmBtB;;AAPD,AAII,KAJC,CAID,EAAE,EAJN,KAAK,CAIG,EAAE,CAAC;EACH,YAAY,EAAE,IAAI;CACrB",
+    "sources": [
+        "history.scss",
+        "_config.scss"
+    ],
+    "names": [],
+    "file": "history.css"
+}

@@ -29,6 +29,7 @@ class CaseUnitMapper(db.Model):
     unitID = db.Column(db.Integer, nullable=False)
     testResults = db.relationship('CaseTestResults', backref='case')
     notes = db.relationship('CaseNotes', backref='case')
+    history = db.relationship('CaseHistory', backref='case')
     unit_id = db.Column(db.Integer, db.ForeignKey('units.unitID'))
 
     def __rpr__(self):
@@ -54,6 +55,17 @@ class CaseNotes(db.Model):
     case_id = db.Column(db.Integer, db.ForeignKey('case_unit_mapper.caseID'))
     def __rpr__(self):
         return '<case_notes %r>' % self.note
+        
+class CaseHistory(db.Model):
+    __tablename__: "case_history"
+    id = db.Column(db.Integer, primary_key=True)
+    diagnosis = db.Column(db.String(), nullable=False)
+    date = db.Column(db.String(), nullable=False)
+    reference = db.Column(db.String(), nullable=True, default = "---")
+    reference_name = db.Column(db.String(), nullable=True, default = "---")
+    case_id = db.Column(db.Integer, db.ForeignKey('case_unit_mapper.caseID'))
+    def __rpr__(self):
+        return '<case_history %r>' % self.diagnosis
 
 class UnitsSchema(marshmallow.ModelSchema):
     class Meta:
@@ -61,6 +73,10 @@ class UnitsSchema(marshmallow.ModelSchema):
 
     mapper = marshmallow.Nested(CaseUnitMapper)
 
+class CaseHistorySchema(marshmallow.ModelSchema):
+    class Meta:
+        model = CaseHistory
+    
 class CaseTestResultsSchema(marshmallow.ModelSchema):
     class Meta:
         model = CaseTestResults
@@ -71,10 +87,11 @@ class CaseNotesSchema(marshmallow.ModelSchema):
 
 class CaseUnitMapperSchema(marshmallow.Schema):
     class Meta:
-        fields = ('caseID', 'unitID', 'testResults', 'notes')
+        fields = ('caseID', 'unitID', 'testResults', 'notes', 'history')
 
     testResults = marshmallow.Nested(CaseTestResultsSchema, many=True)
     notes = marshmallow.Nested(CaseNotesSchema, many=True)
+    history = marshmallow.Nested(CaseHistorySchema, many=True)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -108,8 +125,15 @@ def get_cases():
 def transcripts():
     form = SelectCaseForm()
     if 'selected_case' not in session.keys():
-        return redirect( url_for("index", form = form) )
+        return redirect( url_for("index") )
     return render_template("transcripts.html", form = form, case = session['selected_case'], unit_name = session['unit_name'])
+
+@app.route("/history", methods = ["GET"])
+def history():
+    form = SelectCaseForm()
+    if 'selected_case' not in session.keys():
+        return redirect( url_for("index") )
+    return render_template("history.html", form = form, case = session['selected_case'], unit_name = session['unit_name'])
 
 if __name__ == "__main__":
     app.run(debug = True)

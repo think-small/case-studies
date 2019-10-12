@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Clinical Chemistry - History
+{% endblock %}
+{% block css %}
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'history.css') }}">
+{% endblock %}
+
+
+{% block bodycontent %}
+    <table class = "stripped responsive-table">
+        <thead>
+            <th>Diagnosis</th>
+            <th>Date</th>
+            <th>Reference</th>
+        </thead>
+        <tbody>
+            {% for diagnosis in case.history %}
+                <tr>
+                    <td>{{ diagnosis.diagnosis }}</td>
+                    <td>{{ diagnosis.date }}</td>
+                    <td><a target = "_blank" href = "{{diagnosis.reference}}">{{diagnosis.reference_name}}</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

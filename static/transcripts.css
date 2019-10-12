@@ -115,6 +115,10 @@ body {
   color: #fefefe;
 }
 
+#sidebar a:not(.btn-small):hover i {
+  color: #fefefe;
+}
+
 #sidebar i {
   margin-right: 1rem;
   color: #b5b7bc;
