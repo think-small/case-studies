@@ -85,6 +85,10 @@ body {
         background: #3e485D;
         border-left: 3px solid #fd7f72;
         color: $offwhite-color;
+
+        i {
+            color: $offwhite-color;
+        }
     }
 
     i {

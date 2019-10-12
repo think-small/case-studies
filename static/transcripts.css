@@ -115,10 +115,6 @@ body {
   color: #fefefe;
 }
 
-#sidebar a:not(.btn-small):hover i {
-  color: #fefefe;
-}
-
 #sidebar i {
   margin-right: 1rem;
   color: #b5b7bc;
@@ -136,4 +132,31 @@ body {
   text-align: center;
   padding: 0.5rem;
 }
-/*# sourceMappingURL=styles.css.map */
+
+#sidebar #transcripts {
+  background: #3e485D;
+  border-left: 3px solid #fd7f72;
+  color: #fefefe;
+}
+
+#sidebar #transcripts i {
+  color: #fefefe;
+}
+
+.collapsible-header {
+  letter-spacing: 1.4px;
+  font-size: 18px;
+  padding-left: 2rem;
+  background: #97878c;
+  color: #fefefe;
+}
+
+.collapsible-header i {
+  margin-left: 2rem;
+}
+
+.collapsible-body {
+  background: #fefefe;
+  color: #3e485D;
+}
+/*# sourceMappingURL=transcripts.css.map */

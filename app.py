@@ -1,7 +1,8 @@
 import os
-from flask import Flask, render_template, session, redirect, url_for, flash
+from flask import Flask, render_template, session, redirect, url_for, flash, jsonify, request
 from forms import SelectCaseForm
 from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
 basedirectory = os.path.abspath(os.path.dirname(__file__))
 
@@ -11,6 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedirector
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+marshmallow = Marshmallow(app)
 
 class Units(db.Model):
     __tablename__: "units"
@@ -47,58 +49,67 @@ class CaseNotes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     note = db.Column(db.String(), nullable=False)
     noteType = db.Column(db.String(), nullable=False)
+    location = db.Column(db.String(), nullable=False)
+    date = db.Column(db.String(), nullable=False)    
     case_id = db.Column(db.Integer, db.ForeignKey('case_unit_mapper.caseID'))
     def __rpr__(self):
         return '<case_notes %r>' % self.note
 
+class UnitsSchema(marshmallow.ModelSchema):
+    class Meta:
+        fields = ( "unitID", "unit", "mappper" )
+
+    mapper = marshmallow.Nested(CaseUnitMapper)
+
+class CaseTestResultsSchema(marshmallow.ModelSchema):
+    class Meta:
+        model = CaseTestResults
+
+class CaseNotesSchema(marshmallow.ModelSchema):
+    class Meta:
+        model = CaseNotes
+
+class CaseUnitMapperSchema(marshmallow.Schema):
+    class Meta:
+        fields = ('caseID', 'unitID', 'testResults', 'notes')
+
+    testResults = marshmallow.Nested(CaseTestResultsSchema, many=True)
+    notes = marshmallow.Nested(CaseNotesSchema, many=True)
+
 @app.route("/", methods=["GET", "POST"])
 def index():
+    #  Clear session keys
+    key_list = list(session.keys())
+    for key in key_list:
+        session.pop(key)
+
     form = SelectCaseForm()
-    if form.validate_on_submit():
-        session['units'] = {
-            'osmo': form.osmoLytes.data,
-            'renal': form.renal.data,
-            'lipids': form.lipoprotein.data,
-            'hepatitisHiv': form.hepatitisHiv.data,
-            'enzymes': form.enzymes.data
-        }
-
-        session['unitsMapper'] = {
-            'osmo': 1,
-            'renal': 2,
-            'lipids': 3,
-            'hepatitisHiv': 4,
-            'enzymes': 5
-        }
-
-        units_to_query = []
-        for key, value in session['units'].items():
-            if value:
-                units_to_query.append(session['unitsMapper'][key])
-        
-        queried_cases = []
-        for value in units_to_query:
-            query = CaseUnitMapper.query.filter_by(unitID = value).all()
-            queried_cases.append(query)
-        session['cases'] = queried_cases
-        session['selected_case'] = session['cases'][0][0]
-        session['selected_case_notes'] = []
-        for note in session['selected_case'].notes:
-            session['selected_case_notes'].append([note.note, note.noteType])
-
-        if all( value == False for value in session['units'].values() ):
-            flash('Choose at least one unit to review')
-            return redirect( url_for('index') )
-        else:
-            flash('New case loaded!')
-            return redirect( url_for('transcripts') )
+    if 'selected_case' in session.keys():
+        return redirect( url_for("transcripts", form = form, case = session['selected_case'], unit_name = session['unit_name']) )
     return render_template("index.html", form = form)
+
+@app.route("/get_cases", methods = ["POST"])
+def get_cases():
+    form = SelectCaseForm()
+
+    query = CaseUnitMapper.query.filter_by(unitID = 1).all()
+    mapper_schema = CaseUnitMapperSchema(many=True)
+    # TODO: randomize queried cases
+    session['cases'] = mapper_schema.dump(query)
+    session['selected_case'] = session['cases'][0]
+
+    unit_name_query = Units.query.filter_by(unitID = session['selected_case']['unitID']).first()
+    units_schema = UnitsSchema()
+    session['unit_name'] = units_schema.dump(unit_name_query)['unit']
+
+    return redirect( url_for("transcripts", form = form) )
 
 @app.route("/trancripts", methods = ["GET", "POST"])
 def transcripts():
     form = SelectCaseForm()
-    notes = session['selected_case_notes']
-    return render_template("transcripts.html", form = form, notes = notes)
+    if 'selected_case' not in session.keys():
+        return redirect( url_for("index", form = form) )
+    return render_template("transcripts.html", form = form, case = session['selected_case'], unit_name = session['unit_name'])
 
 if __name__ == "__main__":
     app.run(debug = True)
