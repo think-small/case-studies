@@ -41,7 +41,22 @@ class CaseTestResults(db.Model):
     testName = db.Column(db.String(20), nullable=False)
     lowerBound = db.Column(db.Integer, nullable=False)
     upperBound = db.Column(db.Integer, nullable=False)
+    units = db.Column(db.String(), nullable=False)
+    valueType = db.Column(db.String(), nullable=False, default="integer")
+    precision = db.Column(db.Integer, nullable=True)
     case_id = db.Column(db.Integer, db.ForeignKey('case_unit_mapper.caseID'))
+    def __rpr__(self):
+        return '<case_test_results %r>' % self.testName
+
+class NormalTestResults(db.Model):
+    __tablename__: "caseTestResults"
+    id = db.Column(db.Integer, primary_key=True)
+    testName = db.Column(db.String(20), nullable=False)
+    lowerBound = db.Column(db.Integer, nullable=False)
+    upperBound = db.Column(db.Integer, nullable=False)
+    units = db.Column(db.String(), nullable=False)
+    valueType = db.Column(db.String(), nullable=False, default="integer")
+    precision = db.Column(db.Integer, nullable=True)
     def __rpr__(self):
         return '<case_test_results %r>' % self.testName
 
@@ -80,6 +95,10 @@ class CaseHistorySchema(marshmallow.ModelSchema):
 class CaseTestResultsSchema(marshmallow.ModelSchema):
     class Meta:
         model = CaseTestResults
+
+class NormalTestResultsSchema(marshmallow.ModelSchema):
+    class Meta:
+        model = NormalTestResults
 
 class CaseNotesSchema(marshmallow.ModelSchema):
     class Meta:
@@ -134,6 +153,16 @@ def history():
     if 'selected_case' not in session.keys():
         return redirect( url_for("index") )
     return render_template("history.html", form = form, case = session['selected_case'], unit_name = session['unit_name'])
+
+@app.route("/orders", methods = ["GET", "POST"])
+def orders():
+    if 'selected_case' not in session.keys():
+        return redirect( url_for("index") )
+    form = SelectCaseForm()
+    normal_results_query = NormalTestResults.query.all()
+    normal_results_schema = NormalTestResultsSchema(many=True)
+    normal_results = normal_results_schema.dump(normal_results_query)
+    return render_template("orders.html", form = form, case = session['selected_case'], unit_name = session['unit_name'], normal_results = normal_results)
 
 if __name__ == "__main__":
     app.run(debug = True)

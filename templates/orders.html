@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Clinical Chemistry - Orders
+{% endblock %}
+{% block css %}
+    <link rel = "stylesheet" href = "{{ url_for('static', filename = 'orders.css') }}">
+{% endblock %}
+
+{% block bodycontent %}
+<div class="card">
+    <div class="card-content">
+        <p>
+            Enter the name of a test you want to order, or consult the test directory for additional
+            assistance. Click "Submit" and navigate to "Test Results" to access your results.
+        </p>
+        <div class = 'order-input-container'>
+            <div class="input-field">
+                <input type="text" id="order-input" class="autocomplete">
+                <label for="order-input">Enter Order</label>
+                <button class="btn waves-effect waves-light" id = "order-submit" type="submit" name="action">Submit</button>            
+            </div>            
+        </div>
+    </div>
+    <div class="card-tabs">
+        <ul class="tabs tabs-fixed-width">
+            <li class="tab"><a class = "active" href="#ordered-tests">Ordered Tests</a></li>
+            <li class="tab"><a href="#test-directory">Test Directory</a></li>
+        </ul>
+    </div>
+    <div class="card-content grey lighten-4">
+        <div id="ordered-tests">Ordered tests to display here</div>
+        <div id="test-directory">Test directory to display here</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        var caseTestResults = {{ case.testResults | tojson }};
+        var normalResults = {{ normal_results | tojson }};
+    </script>
+    <script type = "text/javascript" src = "{{ url_for( 'static', filename = 'my_js/orders.js' ) }}"></script>
+{% endblock %}

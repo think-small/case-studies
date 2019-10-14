@@ -1,0 +1,64 @@
+#sidebar #orders {
+  background: #3e485D;
+  border-left: 3px solid #fd7f72;
+  color: #fefefe;
+}
+
+#sidebar #orders i {
+  color: #fefefe;
+}
+
+.card {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.order-input-container {
+  width: 90%;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.order-input-container button {
+  background: #fd7f72;
+  color: #fefefe;
+}
+
+.order-input-container button:hover {
+  background: #5f6e8e;
+}
+
+.order-input-container #order-input {
+  width: 65%;
+}
+
+.order-input-container input[type='text']:not(.browser-default):focus:not([readonly]) + label {
+  color: #fd7f72;
+}
+
+.order-input-container .input-field input[type=text]:focus {
+  border-bottom: 1px solid #fd7f72;
+  -webkit-box-shadow: 0 1px 0 0 #fd7f72;
+          box-shadow: 0 1px 0 0 #fd7f72;
+}
+
+.order-input-container .dropdown-content li > span {
+  color: #fd7f72;
+}
+
+#toast-container {
+  width: 14%;
+  top: 2rem;
+  left: 53%;
+}
+
+#toast-container .toast {
+  background: #fd7f72;
+  color: #fefefe;
+}
+/*# sourceMappingURL=orders.css.map */

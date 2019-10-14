@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='materialize/css/materialize.min.css') }}" />
     <link rel = "stylesheet" href = "{{ url_for('static', filename='styles.css') }}" />
-    {% block css %}{% endblock %}
+    {% block css %}{% endblock %}    
 </head>
 <body>
     <div id = "app-window">
@@ -25,7 +25,7 @@
             </div>
             <a href = "{{ url_for('transcripts') }}" id = "transcripts"><i class="fas fa-clipboard-list icon"></i>TRANSCRIPTS</a>
             <a href = "{{ url_for('history') }}" id = "history"><i class="fas fa-notes-medical icon"></i>CLINICAL HISTORY</a>
-            <a href = "#" id = "orders"><i class="fas fa-vial icon"></i>ORDERS</a>
+            <a href = "{{ url_for('orders') }}" id = "orders"><i class="fas fa-vial icon"></i>ORDERS</a>
             <a href = "#" id = "results"><i class="far fa-list-alt icon"></i>TEST RESULTS</a>
             <a href = "#" id = "interpretation"><i class="fas fa-user-md icon"></i>INTERPRETATION</a>
         </div>
@@ -80,5 +80,6 @@
     </div>
 </body>
 <script type="text/javascript" src="{{ url_for('static', filename='materialize/js/materialize.min.js') }}"></script>
+{% block javascript %}{% endblock %}
 <script type="text/javascript" src="{{ url_for('static', filename='my_js/base.js') }}"></script>
 </html>
