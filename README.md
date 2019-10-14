@@ -7,7 +7,7 @@ This app is designed to deliver case studies to students in a manner that simula
 Dependencies:
 <ul>
   <li>SASS - organizing and streamlining writing of CSS.</li>
-  <li>MaterializeCSS - collapsible (popout) and modals used.</li>
+  <li>MaterializeCSS - collapsible (popout), modals, toasts, and autocomplete are used. No JQuery used.</li>
   <li>Font Awesome - menu icons</li>
   <li>Flask - python framework for server-side development</li>
   <li>Flask-SQLAlchemy - database integration</li>
