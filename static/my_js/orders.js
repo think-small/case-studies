@@ -5,7 +5,7 @@ console.log(normalResults);
 //  Add panel names to test names passed to autocomplete instance
 const testNames = {};
 normalResults.forEach(test => testNames[displayTestName(test.testName)] = null);
-makeArrayOfPanels().forEach(panel => testNames[displayTestName(panel.testName)] = null);
+makeArrayOfPanels(true).forEach(panel => testNames[displayTestName(panel.testName)] = null);
 const autocompleteInput = document.querySelector('.autocomplete');
 const instance = M.Autocomplete.init(autocompleteInput, {data: testNames, minLength: 2, limit: 5});
 
@@ -62,7 +62,27 @@ function calcLDL(total_cholesterol, hdl, vldl) {
 }
 
 function checkForDuplicates(collection, element) {
+    /*
+        Checks to see if user is ordering a duplicate test. Needs to handle test panel orders.
+        collection type :: array of strings - tests already ordered
+        element type :: string - user's new order
+        return type :: boolean - True if element is found in collection, otherwise false
+    */
     modifiedCollection = Object.keys(JSON.parse(collection)).map(testName => standardTestName(testName));
+    switch (standardTestName(element)) {
+        case "bmp":
+            return modifiedCollection.some(element => BMP.includes(element));
+        case "cmp":
+            return modifiedCollection.some(element => CMP.includes(element));
+        case "hft":
+            return modifiedCollection.some(element => HFT.includes(element));
+        case "lipid_panel":
+            return modifiedCollection.some(element => lipidPanel.includes(element));
+        case "renal_panel":
+            return modifiedCollection.some(element => renalPanel.includes(element));
+        case "iron_panel":
+            return modifiedCollection.some(element => ironPanel.includes(element));
+    }
     return modifiedCollection.includes(standardTestName(element));
 }
 
@@ -70,25 +90,29 @@ function findOrder(inputValue) {
     //  Check if user's order exists in caseTestResults
     let isInCaseTestResults = caseTestResults.some(test => test.testName.toLowerCase() == standardTestName(inputValue));
     let isInNormalTestResults = normalResults.some(test => test.testName.toLowerCase() == standardTestName(inputValue));
+    let isAPanelOrder = makeArrayOfPanels(true).some(panel => panel.testName.toLowerCase() == standardTestName(inputValue));
     
-    if (isInCaseTestResults) {
-        caseTestResults
-            .filter(result => result.testName.toLowerCase() == standardTestName(inputValue))
-            .forEach(result => {
-                const val = getRandomNumber(result.lowerBound, result.upperBound, result.valueType, result.precision);
-                orderedTests[result.testName] = val;
-                sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
-            });
+    if (isAPanelOrder) {
+        switch(standardTestName(inputValue)) {
+            case "bmp":
+                return orderPanelTests(BMP);
+            case "cmp":
+                return orderPanelTests(CMP);
+            case "hft":
+                return orderPanelTests(HFT);
+            case "renal_panel":
+                return orderPanelTests(renalPanel);
+            case "lipid_panel":
+                return orderPanelTests(lipidPanel);
+            case "iron_panel":
+                return orderPanelTests(ironPanel);
+        }
+    }
+    else if (isInCaseTestResults) {
+        retrieveResults(standardTestName(inputValue), caseTestResults);
     }
     else if (isInNormalTestResults) {
-        //  If not found, check normalTestResults
-        normalResults
-            .filter(result => result.testName.toLowerCase() == standardTestName(inputValue))
-            .forEach(result => {
-                const val = getRandomNumber(result.lowerBound, result.upperBound, result.valueType, result.precision);
-                orderedTests[result.testName] = val;
-                sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
-            });
+        retrieveResults(standardTestName(inputValue), normalResults);
     }
     else if (!isInCaseTestResults && !isInNormalTestResults) {
         clearInput();
@@ -96,8 +120,58 @@ function findOrder(inputValue) {
     }
 }
 
-function makeArrayOfPanels() {
-    return [{"testName": "BMP"}, {"testName": "CMP"}, {"testName": "HFT"}, {"testName": "lipid_panel"}, {"testName": "renal_panel"}, {"testName": "iron_panel"}]
+function orderPanelTests(panel) {
+    /*
+        Iterate through panel, and if test is in caseTestResults, generate result from its params.
+        Otherwise, check if test in normalResults and generate result from its params. Push result
+        to sessionStorage['orderedTests']
+        panel type :: array of strings - names of tests in a given panel
+        return type :: none - random result is generated and pushed to sessionStorage['orderedTests']
+    */
+    panel.forEach(test => {
+        if (testNamesToArray(caseTestResults).includes(standardTestName(test))) {
+            retrieveResults(test, caseTestResults);
+        }
+        else if (testNamesToArray(normalResults).includes(standardTestName(test))) {            
+            retrieveResults(test, normalResults);
+        }
+    });
+}
+
+function retrieveResults(test, arrayOfResults) {
+    /*
+        Given a test_name look for corresponding test in arrayOfResults, generate a random_number
+        within the params of the test, and push data to sessionStorage as test_name: random_number
+        test type :: string - name of test to be found
+        arrayOfResults type :: array of objects - expecting either caseTestResults or normalResults
+        return type :: none - pushes key-value pair to sessionStorage['orderedTests']
+    */
+    arrayOfResults
+        .filter(result => result.testName.toLowerCase() == standardTestName(test))
+        .forEach(foundTest => {
+            const val = getRandomNumber(foundTest.lowerBound, foundTest.upperBound, foundTest.valueType, foundTest.precision);
+            orderedTests[standardTestName(test)] = val;
+            sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
+        })
+}
+
+function makeArrayOfPanels(arrOfObj) {
+    /*
+        Returns either an array of test panel names or an array of objects with testName: panelName
+        key-value pairs.
+        arrOfObj type :: boolean
+        return type :: if arrofObj is True, return an array of objects, otherwise return array of strings
+    */
+    if (arrOfObj) {
+        return [{"testName": "BMP"}, {"testName": "CMP"}, {"testName": "HFT"}, {"testName": "lipid_panel"}, {"testName": "renal_panel"}, {"testName": "iron_panel"}]
+    }
+    else {
+        return ["BMP", "CMP", "HFT", "lipid_panel", "renal_panel", "iron_panel"];
+    }
+}
+
+function testNamesToArray(arrayOfObj) {
+    return arrayOfObj.map(test => test.testName.toLowerCase());
 }
 
 function standardTestName(str) {
@@ -105,7 +179,11 @@ function standardTestName(str) {
 }
 
 function displayTestName(str) {
-    return str.replace(/_/g, " ");
+    return str
+            .replace(/_/g, " ")
+            .split(" ")
+            .map(word => word[0].toUpperCase() + word.substr(1))
+            .join(" ");
 }
 
 function getRandomNumber(min, max, type, precision = 0) {
