@@ -150,7 +150,16 @@ function retrieveResults(test, arrayOfResults) {
         .filter(result => result.testName.toLowerCase() == standardTestName(test))
         .forEach(foundTest => {
             const val = getRandomNumber(foundTest.lowerBound, foundTest.upperBound, foundTest.valueType, foundTest.precision);
-            orderedTests[standardTestName(test)] = val;
+            if (arrayOfResults == normalResults) {
+                orderedTests[standardTestName(test)] = [val, foundTest.units, foundTest.lowerBound, foundTest.upperBound];
+            }
+            else if (arrayOfResults == caseTestResults) {
+                normalResults
+                    .filter(t => t.testName.toLowerCase() == standardTestName(foundTest.testName))
+                    .forEach(ft => {
+                        orderedTests[standardTestName(test)] = [val, foundTest.units, ft.lowerBound, ft.upperBound]
+                    })
+            }
             sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
         })
 }

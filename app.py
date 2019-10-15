@@ -39,8 +39,8 @@ class CaseTestResults(db.Model):
     __tablename__: "caseTestResults"
     id = db.Column(db.Integer, primary_key=True)
     testName = db.Column(db.String(20), nullable=False)
-    lowerBound = db.Column(db.Integer, nullable=False)
-    upperBound = db.Column(db.Integer, nullable=False)
+    lowerBound = db.Column(db.Float(precision = 2), nullable=False)
+    upperBound = db.Column(db.Float(precision = 2), nullable=False)
     units = db.Column(db.String(), nullable=False)
     valueType = db.Column(db.String(), nullable=False, default="integer")
     precision = db.Column(db.Integer, nullable=True)
@@ -52,8 +52,8 @@ class NormalTestResults(db.Model):
     __tablename__: "caseTestResults"
     id = db.Column(db.Integer, primary_key=True)
     testName = db.Column(db.String(20), nullable=False)
-    lowerBound = db.Column(db.Integer, nullable=False)
-    upperBound = db.Column(db.Integer, nullable=False)
+    lowerBound = db.Column(db.Float(precision = 2), nullable=False)
+    upperBound = db.Column(db.Float(precision = 2), nullable=False)
     units = db.Column(db.String(), nullable=False)
     valueType = db.Column(db.String(), nullable=False, default="integer")
     precision = db.Column(db.Integer, nullable=True)
