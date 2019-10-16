@@ -37,6 +37,7 @@ submitButton.addEventListener("click", event => {
     }
     else {
         findOrder(inputValue);
+        displayOrders();
     }
     clearInput();
 });
@@ -48,7 +49,7 @@ input.addEventListener("keyup", event => {
     }
 })
 
-//  Helper functions
+//  ********** HELPER FUNCTIONS **********
 function calcAnionGap(sodium, chloride, co2) {
     return sodium - chloride - co2;
 }
@@ -177,6 +178,18 @@ function makeArrayOfPanels(arrOfObj) {
     else {
         return ["BMP", "CMP", "HFT", "lipid_panel", "renal_panel", "iron_panel"];
     }
+}
+
+function displayOrders() {
+    htmlDiv = document.querySelector('#ordered-tests');
+    htmlDiv.innerText = "";
+    Object.keys(JSON.parse(sessionStorage.getItem('orderedTests')))
+        .forEach(test => {
+            chip = document.createElement('div');
+            chip.className = 'chip';
+            chip.innerText = displayTestName(test);
+            htmlDiv.appendChild(chip);
+        })    
 }
 
 function testNamesToArray(arrayOfObj) {
