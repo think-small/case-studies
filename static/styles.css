@@ -22,7 +22,7 @@ body {
 
 #case-selection .btn {
   color: #fefefe;
-  background: #fd7f72;
+  background: #fa7465;
 }
 
 #case-selection #submit {
@@ -79,7 +79,7 @@ body {
       -ms-flex-pack: center;
           justify-content: center;
   margin-top: 1rem;
-  background: #fd7f72;
+  background: #fa7465;
   color: #fefefe;
   width: 46%;
   height: 2rem;
@@ -131,7 +131,7 @@ body {
 
 #main-panel .card-panel {
   width: 40%;
-  background: #fd7f72;
+  background: #fa7465;
   color: #fefefe;
   text-align: center;
   padding: 0.5rem;

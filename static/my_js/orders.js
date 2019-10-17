@@ -1,6 +1,3 @@
-console.log(caseTestResults);
-console.log(normalResults);
-
 //  Initialize materialize autocomplete
 //  Add panel names to test names passed to autocomplete instance
 const testNames = {};
@@ -12,9 +9,13 @@ const instance = M.Autocomplete.init(autocompleteInput, {data: testNames, minLen
 //  Declare/Init variables
 const input = document.querySelector('#order-input');
 const submitButton = document.querySelector('#order-submit');
+
+//  If previous orders exist, populate <div id =#ordered-tests> on orders.html page
+//  Also populate orderedTests object
 let orderedTests;
 if (Object.keys(sessionStorage).includes('orderedTests')) {
     orderedTests = JSON.parse(sessionStorage['orderedTests']);
+    displayOrders();
 }
 else {
     orderedTests = {};
@@ -51,15 +52,11 @@ input.addEventListener("keyup", event => {
 
 //  ********** HELPER FUNCTIONS **********
 function calcAnionGap(sodium, chloride, co2) {
-    return sodium - chloride - co2;
-}
-
-function calcVLDL(triglycerides) {
-    return triglycerides / 5;
+    return [Math.round(sodium - chloride - co2), "---", 12, 16];
 }
 
 function calcLDL(total_cholesterol, hdl, vldl) {
-    return total_cholesterol - hdl - vldl;
+    return [Math.round(total_cholesterol - hdl - vldl), "mg/dL", 80, 200];
 }
 
 function checkForDuplicates(collection, element) {
@@ -125,7 +122,11 @@ function orderPanelTests(panel) {
     /*
         Iterate through panel, and if test is in caseTestResults, generate result from its params.
         Otherwise, check if test in normalResults and generate result from its params. Push result
-        to sessionStorage['orderedTests']
+        to sessionStorage['orderedTests'].
+        Incorporate computed results depending upon the panel ordered. If BMP, CMP, or renalPanel 
+        are ordered, then push [anion_gap, "---", 12, 16].  If lipidPanel, then push 
+        [lipid_panel, "mg/dL", 80, 200].
+
         panel type :: array of strings - names of tests in a given panel
         return type :: none - random result is generated and pushed to sessionStorage['orderedTests']
     */
@@ -137,6 +138,18 @@ function orderPanelTests(panel) {
             retrieveResults(test, normalResults);
         }
     });
+    
+    const data = JSON.parse(sessionStorage.getItem('orderedTests'));
+    const value = 0;
+    if (panel == BMP || panel == CMP || panel == renalPanel) {        
+        orderedTests['anion_gap'] = calcAnionGap(data['sodium'][value], data['chloride'][value], data['co2'][value]);
+        sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
+    }
+    else if (panel == lipidPanel) {
+        const calculatedLDL = calcLDL(data['total_cholesterol'][value], data['hdl'][value], data['triglycerides'][value]/5);
+        orderedTests['calculated_ldl'] = calculatedLDL;
+        sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
+    }
 }
 
 function retrieveResults(test, arrayOfResults) {
@@ -187,7 +200,7 @@ function displayOrders() {
         .forEach(test => {
             chip = document.createElement('div');
             chip.className = 'chip';
-            chip.innerText = displayTestName(test);
+            chip.innerText = test;
             htmlDiv.appendChild(chip);
         })    
 }

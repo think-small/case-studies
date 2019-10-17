@@ -59,3 +59,68 @@
         color: $offwhite-color;
     }
 }
+
+//  Test directory
+.test-directory-searchbar {
+    --size: 40px;
+
+    border: 2px solid $accent-color;
+    display: inline-flex;
+    border-radius: 50px;
+    height: var(--size);
+    padding: 3px;
+    width: var(--size);
+    position: relative;
+    overflow: hidden;
+    transition: width 350ms cubic-bezier(.18, .89, .32, 1.10);
+
+    &-text-input {
+        flex-grow: 1;
+        padding: 0 0.5rem;
+        border: 0;
+        background: transparent;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        line-height: calc(var(--size) - 3px);
+        opacity: 0;
+        cursor: pointer;
+        width: calc(100% - var(--size));
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+    &-submit {
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        border-radius: 50%;
+        width: calc(var(--size) - 10px);
+        height: calc(var(--size) - 10px);
+        margin-left: auto;
+        transition: background 200ms ease-in-out;
+    }
+
+    &:focus-within {
+        width: 60%;
+        
+        .test-directory-searchbar-text-input {
+            opacity: 1;
+            cursor: initial;
+        }
+
+        .test-directory-searchbar-submit {
+            background: $accent-color;
+            color: $offwhite-color;
+
+            &:focus,
+            &:hover {
+                outline: 0;
+                box-shadow: 0 0 10px rgba(177, 44, 44, 0.35);
+            }
+        }
+    }
+}

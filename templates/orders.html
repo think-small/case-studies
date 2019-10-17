@@ -29,8 +29,18 @@
         </ul>
     </div>
     <div class="card-content grey lighten-4">
-        <div id="ordered-tests">Ordered tests to display here</div>
-        <div id="test-directory">Test directory to display here</div>
+        <div id="ordered-tests">No tests ordered yet</div>
+        <div id="test-directory">
+            <ul>
+                <li>Find specific test
+                    <span class = 'test-directory-searchbar'>
+                        <input type = "text" class = "test-directory-searchbar-text-input browser-default" aria-label = "test-directory-searchbar"/>
+                        <button class = "test-directory-searchbar-submit" aria-label = "test-directory-searchbar-submit"><i class = "fas fa-search"></i></button>
+                    </span>
+                </li>
+                <li>Browse all tests</li>
+            </ul>
+        </div>
     </div>
 </div>
 {% endblock %}
