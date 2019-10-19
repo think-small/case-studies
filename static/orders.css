@@ -1,0 +1,133 @@
+#sidebar #orders {
+  background: #3e485D;
+  border-left: 3px solid #fd7f72;
+  color: #fefefe;
+}
+
+#sidebar #orders i {
+  color: #fefefe;
+}
+
+.card {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.order-input-container {
+  width: 90%;
+  margin: 0 auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.order-input-container button {
+  background: #fa7465;
+  color: #fefefe;
+}
+
+.order-input-container button:hover {
+  background: #5f6e8e;
+}
+
+.order-input-container #order-input {
+  width: 65%;
+}
+
+.order-input-container input[type='text']:not(.browser-default):focus:not([readonly]) + label {
+  color: #fa7465;
+}
+
+.order-input-container .input-field input[type=text]:focus {
+  border-bottom: 1px solid #fa7465;
+  -webkit-box-shadow: 0 1px 0 0 #fa7465;
+          box-shadow: 0 1px 0 0 #fa7465;
+}
+
+.order-input-container .dropdown-content li > span {
+  color: #fa7465;
+}
+
+#toast-container {
+  width: 14%;
+  top: 2rem;
+  left: 53%;
+}
+
+#toast-container .toast {
+  background: #fa7465;
+  color: #fefefe;
+}
+
+.test-directory-searchbar {
+  --size: 40px;
+  border: 2px solid #fa7465;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  border-radius: 50px;
+  height: var(--size);
+  padding: 3px;
+  width: var(--size);
+  position: relative;
+  overflow: hidden;
+  -webkit-transition: width 350ms cubic-bezier(0.18, 0.89, 0.32, 1.1);
+  transition: width 350ms cubic-bezier(0.18, 0.89, 0.32, 1.1);
+}
+
+.test-directory-searchbar-text-input {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  padding: 0 0.5rem;
+  border: 0;
+  background: transparent;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  line-height: calc(var(--size) - 3px);
+  opacity: 0;
+  cursor: pointer;
+  width: calc(100% - var(--size));
+}
+
+.test-directory-searchbar-text-input:focus {
+  outline: 0;
+}
+
+.test-directory-searchbar-submit {
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  width: calc(var(--size) - 10px);
+  height: calc(var(--size) - 10px);
+  margin-left: auto;
+  -webkit-transition: background 200ms ease-in-out;
+  transition: background 200ms ease-in-out;
+}
+
+.test-directory-searchbar:focus-within {
+  width: 60%;
+}
+
+.test-directory-searchbar:focus-within .test-directory-searchbar-text-input {
+  opacity: 1;
+  cursor: initial;
+}
+
+.test-directory-searchbar:focus-within .test-directory-searchbar-submit {
+  background: #fa7465;
+  color: #fefefe;
+}
+
+.test-directory-searchbar:focus-within .test-directory-searchbar-submit:focus, .test-directory-searchbar:focus-within .test-directory-searchbar-submit:hover {
+  outline: 0;
+  -webkit-box-shadow: 0 0 10px rgba(177, 44, 44, 0.35);
+          box-shadow: 0 0 10px rgba(177, 44, 44, 0.35);
+}
+/*# sourceMappingURL=orders.css.map */
