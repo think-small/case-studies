@@ -59,13 +59,13 @@ function calcLDL(total_cholesterol, hdl, vldl) {
     return [Math.round(total_cholesterol - hdl - vldl), "mg/dL", 80, 200];
 }
 
+/**
+    Checks to see if user is ordering a duplicate test. Needs to handle test panel orders.
+    @param { string[] }  collection - array of strings representing tests already ordered
+    @param { string } element - user's new order
+    @returns { boolean } - True if element is found in collection, otherwise false
+*/
 function checkForDuplicates(collection, element) {
-    /**
-        Checks to see if user is ordering a duplicate test. Needs to handle test panel orders.
-        @param { String[] }  collection - array of strings representing tests already ordered
-        @param {string} element - user's new order
-        @returns {boolean} - True if element is found in collection, otherwise false
-    */
     modifiedCollection = Object.keys(JSON.parse(collection)).map(testName => standardTestName(testName));
     switch (standardTestName(element)) {
         case "bmp":
@@ -84,18 +84,17 @@ function checkForDuplicates(collection, element) {
     return modifiedCollection.includes(standardTestName(element));
 }
 
+/**
+    Take user input and check if it is:
+        -A panel order. If so, iterate through the appropriate panel, and order each test
+            according to whether it is in caseTestResults or normalResults.
+        -In caseTestResults. If so, push the key-value pair of inputValue: [value, units, lowerBound, upperBound]
+            into sessionStorage['orderedTests']
+        -In normalResults. If so, push the key value pair of inputValue: [value, units, lowerBound, upperBound]
+            into sessionStorage['orderedTests']
+    @param { string } inputValue - name of test being ordered by user
+*/
 function findOrder(inputValue) {
-    /**
-        Take user input and check if it is:
-            -A panel order. If so, iterate through the appropriate panel, and order each test
-             according to whether it is in caseTestResults or normalResults.
-            -In caseTestResults. If so, push the key-value pair of inputValue: [value, units, lowerBound, upperBound]
-             into sessionStorage['orderedTests']
-            -In normalResults. If so, push the key value pair of inputValue: [value, units, lowerBound, upperBound]
-             into sessionStorage['orderedTests']
-        @param {string} inputValue - name of test being ordered by user
-
-    */
     let isInCaseTestResults = caseTestResults.some(test => test.testName.toLowerCase() == standardTestName(inputValue));
     let isInNormalTestResults = normalResults.some(test => test.testName.toLowerCase() == standardTestName(inputValue));
     let isAPanelOrder = makeArrayOfPanels(true).some(panel => panel.testName.toLowerCase() == standardTestName(inputValue));
@@ -128,17 +127,17 @@ function findOrder(inputValue) {
     }
 }
 
-function orderPanelTests(panel) {
-    /**
-        Iterate through panel, and if test is in caseTestResults, generate result from its params.
-        Otherwise, check if test in normalResults and generate result from its params. Push result
-        to sessionStorage['orderedTests'].
-        Incorporate computed results depending upon the panel ordered. If BMP, CMP, or renalPanel 
-        are ordered, then push [anion_gap, "---", 12, 16].  If lipidPanel, then push 
-        [lipid_panel, "mg/dL", 80, 200].
+/**
+    Iterate through panel, and if test is in caseTestResults, generate result from its params.
+    Otherwise, check if test in normalResults and generate result from its params. Push result
+    to sessionStorage['orderedTests'].
+    Incorporate computed results depending upon the panel ordered. If BMP, CMP, or renalPanel 
+    are ordered, then push [anion_gap, "---", 12, 16].  If lipidPanel, then push 
+    [lipid_panel, "mg/dL", 80, 200].
 
-        @param { String[] } panel - names of tests in a given panel
-    */
+    @param { string[] } panel - names of tests in a given panel
+*/
+function orderPanelTests(panel) {
     panel.forEach(test => {
         if (testNamesToArray(caseTestResults).includes(standardTestName(test))) {
             retrieveResults(test, caseTestResults);
@@ -161,13 +160,13 @@ function orderPanelTests(panel) {
     }
 }
 
+/**
+    Given a test_name look for corresponding test in arrayOfResults, generate a random_number
+    within the params of the test, and push data to sessionStorage as test_name: random_number
+    @param { string } test - name of test to be found
+    @param { Object[] } arrayOfResults - expecting either caseTestResults or normalResults
+*/
 function retrieveResults(test, arrayOfResults) {
-    /**
-        Given a test_name look for corresponding test in arrayOfResults, generate a random_number
-        within the params of the test, and push data to sessionStorage as test_name: random_number
-        @param {string} test - name of test to be found
-        @param { Object[] } arrayOfResults - expecting either caseTestResults or normalResults
-    */
     arrayOfResults
         .filter(result => result.testName.toLowerCase() == standardTestName(test))
         .forEach(foundTest => {
@@ -186,13 +185,13 @@ function retrieveResults(test, arrayOfResults) {
         })
 }
 
+/**
+    Returns either an array of test panel names or an array of objects with testName: panelName
+    key-value pairs.
+    @param {boolean} arrOfObj - flag to indicate whether function should return array of objects or array of strings
+    @return { (Object[] | String[]) } if arrofObj is True, return an array of objects, otherwise return array of strings
+*/
 function makeArrayOfPanels(arrOfObj) {
-    /**
-        Returns either an array of test panel names or an array of objects with testName: panelName
-        key-value pairs.
-        @param {boolean} arrOfObj - flag to indicate whether function should return array of objects or array of strings
-        @return { (Object[] | String[]) } if arrofObj is True, return an array of objects, otherwise return array of strings
-    */
     if (arrOfObj) {
         return [{"testName": "BMP"}, {"testName": "CMP"}, {"testName": "HFT"}, {"testName": "lipid_panel"}, {"testName": "renal_panel"}, {"testName": "iron_panel"}]
     }
