@@ -60,11 +60,11 @@ function calcLDL(total_cholesterol, hdl, vldl) {
 }
 
 function checkForDuplicates(collection, element) {
-    /*
+    /**
         Checks to see if user is ordering a duplicate test. Needs to handle test panel orders.
-        collection type :: array of strings - tests already ordered
-        element type :: string - user's new order
-        return type :: boolean - True if element is found in collection, otherwise false
+        @param { String[] }  collection - array of strings representing tests already ordered
+        @param {string} element - user's new order
+        @returns {boolean} - True if element is found in collection, otherwise false
     */
     modifiedCollection = Object.keys(JSON.parse(collection)).map(testName => standardTestName(testName));
     switch (standardTestName(element)) {
@@ -85,7 +85,17 @@ function checkForDuplicates(collection, element) {
 }
 
 function findOrder(inputValue) {
-    //  Check if user's order exists in caseTestResults
+    /**
+        Take user input and check if it is:
+            -A panel order. If so, iterate through the appropriate panel, and order each test
+             according to whether it is in caseTestResults or normalResults.
+            -In caseTestResults. If so, push the key-value pair of inputValue: [value, units, lowerBound, upperBound]
+             into sessionStorage['orderedTests']
+            -In normalResults. If so, push the key value pair of inputValue: [value, units, lowerBound, upperBound]
+             into sessionStorage['orderedTests']
+        @param {string} inputValue - name of test being ordered by user
+
+    */
     let isInCaseTestResults = caseTestResults.some(test => test.testName.toLowerCase() == standardTestName(inputValue));
     let isInNormalTestResults = normalResults.some(test => test.testName.toLowerCase() == standardTestName(inputValue));
     let isAPanelOrder = makeArrayOfPanels(true).some(panel => panel.testName.toLowerCase() == standardTestName(inputValue));
@@ -119,7 +129,7 @@ function findOrder(inputValue) {
 }
 
 function orderPanelTests(panel) {
-    /*
+    /**
         Iterate through panel, and if test is in caseTestResults, generate result from its params.
         Otherwise, check if test in normalResults and generate result from its params. Push result
         to sessionStorage['orderedTests'].
@@ -127,8 +137,7 @@ function orderPanelTests(panel) {
         are ordered, then push [anion_gap, "---", 12, 16].  If lipidPanel, then push 
         [lipid_panel, "mg/dL", 80, 200].
 
-        panel type :: array of strings - names of tests in a given panel
-        return type :: none - random result is generated and pushed to sessionStorage['orderedTests']
+        @param { String[] } panel - names of tests in a given panel
     */
     panel.forEach(test => {
         if (testNamesToArray(caseTestResults).includes(standardTestName(test))) {
@@ -153,12 +162,11 @@ function orderPanelTests(panel) {
 }
 
 function retrieveResults(test, arrayOfResults) {
-    /*
+    /**
         Given a test_name look for corresponding test in arrayOfResults, generate a random_number
         within the params of the test, and push data to sessionStorage as test_name: random_number
-        test type :: string - name of test to be found
-        arrayOfResults type :: array of objects - expecting either caseTestResults or normalResults
-        return type :: none - pushes key-value pair to sessionStorage['orderedTests']
+        @param {string} test - name of test to be found
+        @param { Object[] } arrayOfResults - expecting either caseTestResults or normalResults
     */
     arrayOfResults
         .filter(result => result.testName.toLowerCase() == standardTestName(test))
@@ -179,11 +187,11 @@ function retrieveResults(test, arrayOfResults) {
 }
 
 function makeArrayOfPanels(arrOfObj) {
-    /*
+    /**
         Returns either an array of test panel names or an array of objects with testName: panelName
         key-value pairs.
-        arrOfObj type :: boolean
-        return type :: if arrofObj is True, return an array of objects, otherwise return array of strings
+        @param {boolean} arrOfObj - flag to indicate whether function should return array of objects or array of strings
+        @return { (Object[] | String[]) } if arrofObj is True, return an array of objects, otherwise return array of strings
     */
     if (arrOfObj) {
         return [{"testName": "BMP"}, {"testName": "CMP"}, {"testName": "HFT"}, {"testName": "lipid_panel"}, {"testName": "renal_panel"}, {"testName": "iron_panel"}]
@@ -194,6 +202,10 @@ function makeArrayOfPanels(arrOfObj) {
 }
 
 function displayOrders() {
+    /**
+        Populates <div id = 'ordered-tests'> with chips representing the names of 
+        ordered tests. Needs to be run with every page refresh.
+    */
     htmlDiv = document.querySelector('#ordered-tests');
     htmlDiv.innerText = "";
     Object.keys(JSON.parse(sessionStorage.getItem('orderedTests')))
