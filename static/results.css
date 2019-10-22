@@ -1,0 +1,26 @@
+#sidebar #results {
+  background: #3e485D;
+  border-left: 3px solid #fd7f72;
+  color: #fefefe;
+}
+
+#sidebar #results i {
+  color: #fefefe;
+}
+
+.table-container {
+  overflow-y: scroll;
+  height: 100%;
+  background: #fefefe;
+  color: #3e485D;
+}
+
+.table-container th, .table-container td {
+  padding-left: 1rem;
+}
+
+.table-container tbody tr:hover {
+  background: #5f6e8e;
+  color: #fefefe;
+}
+/*# sourceMappingURL=results.css.map */

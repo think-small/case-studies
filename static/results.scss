@@ -1,0 +1,27 @@
+@import '_config';
+
+#sidebar #results {
+    background: #3e485D;
+    border-left: 3px solid #fd7f72;
+    color: $offwhite-color;
+
+    i {
+        color: $offwhite-color;
+    }
+}
+
+.table-container {
+    overflow-y: scroll;
+    height: 100%;
+    background: $offwhite-color;
+    color: $primary-color; 
+
+    th, td {
+        padding-left: 1rem;
+    }
+
+    tbody tr:hover {
+        background: $secondary-color;
+        color: $offwhite-color;
+    }
+}

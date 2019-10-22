@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Clilnical Chemistry - Results
+{% endblock %}
+{% block css %}
+    <link rel = "stylesheet" href = "{{  url_for('static', filename = 'results.css') }}" />
+{% endblock %}
+
+{% block bodycontent %}
+    <div class = 'table-container'>
+        <table>
+            <thead>
+                <tr>
+                    <th>Test</th>
+                    <th>Result</th>
+                    <th>Units</th>
+                    <th>Reference Range</th>
+                </tr>
+            </thead>
+            <tbody id = 'results-table-body'></tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block javascript %}
+    <script type = "text/javascript" src = "{{ url_for('static', filename = 'my_js/results.js') }}"></script>
+{% endblock %}
