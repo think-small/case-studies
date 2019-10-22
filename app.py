@@ -164,5 +164,12 @@ def orders():
     normal_results = normal_results_schema.dump(normal_results_query)
     return render_template("orders.html", form = form, case = session['selected_case'], unit_name = session['unit_name'], normal_results = normal_results)
 
+@app.route("/results", methods = ["GET"])
+def results():
+    if 'selected_case' not in session.keys():
+        return redirect( url_for("index") )
+    form = SelectCaseForm()
+    return render_template("results.html", form = form, unit_name = session['unit_name'])
+    
 if __name__ == "__main__":
     app.run(debug = True)

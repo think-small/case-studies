@@ -9,6 +9,7 @@ const instance = M.Autocomplete.init(autocompleteInput, {data: testNames, minLen
 //  Declare/Init variables
 const input = document.querySelector('#order-input');
 const submitButton = document.querySelector('#order-submit');
+let newTests = [];
 
 //  If previous orders exist, populate <div id =#ordered-tests> on orders.html page
 //  Also populate orderedTests object
@@ -39,6 +40,7 @@ submitButton.addEventListener("click", event => {
     else {
         findOrder(inputValue);
         displayOrders();
+        updateResultsBadge();
     }
     clearInput();
 });
@@ -152,11 +154,13 @@ function orderPanelTests(panel) {
     if (panel == BMP || panel == CMP || panel == renalPanel) {        
         orderedTests['anion_gap'] = calcAnionGap(data['sodium'][value], data['chloride'][value], data['co2'][value]);
         sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
+        sessionStorage.setItem('newTests', JSON.stringify(newTests));
     }
     else if (panel == lipidPanel) {
         const calculatedLDL = calcLDL(data['total_cholesterol'][value], data['hdl'][value], data['triglycerides'][value]/5);
         orderedTests['calculated_ldl'] = calculatedLDL;
         sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
+        sessionStorage.setItem('newTests', JSON.stringify(newTests));
     }
 }
 
@@ -173,15 +177,18 @@ function retrieveResults(test, arrayOfResults) {
             const val = getRandomNumber(foundTest.lowerBound, foundTest.upperBound, foundTest.valueType, foundTest.precision);
             if (arrayOfResults == normalResults) {
                 orderedTests[standardTestName(test)] = [val, foundTest.units, foundTest.lowerBound, foundTest.upperBound];
+                newTests.push(test);
             }
             else if (arrayOfResults == caseTestResults) {
                 normalResults
                     .filter(t => t.testName.toLowerCase() == standardTestName(foundTest.testName))
                     .forEach(ft => {
                         orderedTests[standardTestName(test)] = [val, foundTest.units, ft.lowerBound, ft.upperBound]
+                        newTests.push(test);
                     })
             }
             sessionStorage.setItem('orderedTests', JSON.stringify(orderedTests));
+            sessionStorage.setItem('newTests', JSON.stringify(newTests));
         })
 }
 
@@ -214,6 +221,12 @@ function displayOrders() {
             chip.innerText = test;
             htmlDiv.appendChild(chip);
         })    
+}
+
+function updateResultsBadge() {
+    badge = document.querySelector('.results-badge');
+    badge.innerText = newTests.length;
+    badge.style.display = 'flex';
 }
 
 function testNamesToArray(arrayOfObj) {
